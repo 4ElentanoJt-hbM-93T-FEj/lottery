@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:loto_app/models/lottery_ticket.dart';
@@ -108,10 +109,12 @@ class _CardDetailState extends State<CardDetail> {
                           children: [
                             Row(
                               children: [
-                                const Expanded(
+                                Expanded(
                                   child: Text(
-                                    "Выберите 5 чисел",
-                                    style: TextStyle(
+                                    selectedValues.length == 5
+                                        ? "Подтвердите выбор"
+                                        : "Выберите 5 чисел",
+                                    style: const TextStyle(
                                       color: Colors.white,
                                     ),
                                   ),
@@ -158,30 +161,45 @@ class _CardDetailState extends State<CardDetail> {
                                 crossAxisSpacing: 5,
                                 mainAxisSpacing: 5,
                               ),
-                              itemCount: 20,
+                              itemCount: selectedValues.length == 5 ? 5 : 20,
                               itemBuilder: (context, index) {
                                 return GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      if (!selectedValues.contains(index + 1)) {
+                                      if (!selectedValues.contains(
+                                          selectedValues.length == 5
+                                              ? selectedValues[index]
+                                              : index + 1)) {
                                         if (selectedValues.length < 5) {
-                                          selectedValues.add(index + 1);
+                                          selectedValues.add(
+                                              selectedValues.length == 5
+                                                  ? selectedValues[index]
+                                                  : index + 1);
                                         }
                                       } else {
-                                        selectedValues.remove(index + 1);
+                                        selectedValues.remove(
+                                            selectedValues.length == 5
+                                                ? selectedValues[index]
+                                                : index + 1);
                                       }
+                                      selectedValues.sort();
                                     });
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: selectedValues.contains(index + 1)
+                                      color: selectedValues.contains(
+                                              selectedValues.length == 5
+                                                  ? selectedValues[index]
+                                                  : index + 1)
                                           ? Colors.amber
                                           : Colors.white,
                                     ),
                                     child: Center(
                                       child: Text(
-                                        '${index + 1}',
+                                        selectedValues.length == 5
+                                            ? "${selectedValues[index]}"
+                                            : '${index + 1}',
                                         style: const TextStyle(
                                           fontSize: 15.0,
                                           fontWeight: FontWeight.w500,
@@ -199,69 +217,198 @@ class _CardDetailState extends State<CardDetail> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        width: 200,
-                        decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 247, 120, 61),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                        ),
+                      // Container(
+                      //   padding: const EdgeInsets.all(10),
+                      //   width: 200,
+                      //   decoration: const BoxDecoration(
+                      //     color: Color.fromARGB(255, 247, 120, 61),
+                      //     borderRadius: BorderRadius.all(
+                      //       Radius.circular(15),
+                      //     ),
+                      //   ),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       SizedBox(
+                      //         width: 40,
+                      //         height: 40,
+                      //         child: ElevatedButton(
+                      //           style: ElevatedButton.styleFrom(
+                      //             padding: const EdgeInsets.all(0),
+                      //             shadowColor: Colors.transparent,
+                      //             backgroundColor: Colors.transparent,
+                      //           ),
+                      //           onPressed: () {
+                      //             setState(() {
+                      //               if (counter > 1) {
+                      //                 counter--;
+                      //               }
+                      //             });
+                      //           },
+                      //           child: const Icon(
+                      //             Icons.remove,
+                      //             color: Colors.white,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       Expanded(
+                      //         child: Center(
+                      //           child: Text(
+                      //             '$counter',
+                      //             style: const TextStyle(
+                      //               color: Colors.white,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       SizedBox(
+                      //         width: 40,
+                      //         height: 40,
+                      //         child: ElevatedButton(
+                      //           style: ElevatedButton.styleFrom(
+                      //             padding: const EdgeInsets.all(0),
+                      //             shadowColor: Colors.transparent,
+                      //             backgroundColor: Colors.transparent,
+                      //           ),
+                      //           onPressed: () {
+                      //             setState(() {
+                      //               if (counter < 10) {
+                      //                 counter++;
+                      //               }
+                      //             });
+                      //           },
+                      //           child: const Icon(
+                      //             Icons.add,
+                      //             color: Colors.white,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // if (selectedValues.length == 5)
+                      SizedBox(
+                        height: 200,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(
-                              width: 40,
-                              height: 40,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(0),
-                                  shadowColor: Colors.transparent,
-                                  backgroundColor: Colors.transparent,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    if (counter > 1) {
-                                      counter--;
-                                    }
-                                  });
-                                },
-                                child: const Icon(
-                                  Icons.remove,
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
                                   color: Colors.white,
                                 ),
+                                child: const Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                "Тип ставки",
+                                                style: TextStyle(
+                                                  color: Colors.black54,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                "Одноразовая ставка",
+                                                style: TextStyle(
+                                                  color: Colors.black54,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 17,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Icon(
+                                          Icons.check_circle,
+                                          size: 30,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
+                            ),
+                            const SizedBox(
+                              width: 20,
                             ),
                             Expanded(
-                              child: Center(
-                                child: Text(
-                                  '$counter',
-                                  style: const TextStyle(
-                                    color: Colors.white,
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(20),
                                   ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 40,
-                              height: 40,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(0),
-                                  shadowColor: Colors.transparent,
-                                  backgroundColor: Colors.transparent,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    if (counter < 10) {
-                                      counter++;
-                                    }
-                                  });
-                                },
-                                child: const Icon(
-                                  Icons.add,
                                   color: Colors.white,
+                                ),
+                                child: const Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                "Тип ставки",
+                                                style: TextStyle(
+                                                  color: Colors.black54,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                "Подписка",
+                                                style: TextStyle(
+                                                  color: Colors.black54,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 17,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Icon(
+                                          Icons.check_circle,
+                                          size: 30,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -282,11 +429,45 @@ class _CardDetailState extends State<CardDetail> {
                     backgroundColor: const Color.fromARGB(255, 2, 110, 71),
                   ),
                   onPressed: () {
-                    setState(() {
-                      if (counter > 1) {
-                        counter--;
-                      }
-                    });
+                    if (selectedValues.length < 5) {
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text(
+                            "Предупреждение",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          backgroundColor:
+                              const Color.fromARGB(255, 2, 110, 71),
+                          content: const Text(
+                            "Вы выбрали не все значения!",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          actions: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(ctx).pop();
+                                  },
+                                  child: const Text(
+                                    "Хорошо",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   },
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
