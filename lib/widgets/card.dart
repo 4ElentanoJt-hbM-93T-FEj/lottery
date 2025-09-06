@@ -59,23 +59,20 @@ class LotoCard extends StatelessWidget {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    "/cardDetail",
-                    arguments: ticket,
-                  );
-                },
-                child: Container(
-                  width: 125,
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 247, 120, 61),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
-                    ),
+              SizedBox(
+                width: 125,
+                height: 50,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 247, 120, 61),
                   ),
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      "/cardDetail",
+                      arguments: ticket,
+                    );
+                  },
                   child: const Center(
                     child: Text(
                       "Играть",

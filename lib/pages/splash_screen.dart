@@ -14,19 +14,22 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle().copyWith(
-        statusBarBrightness: Brightness.light,
-        statusBarColor: const Color.fromARGB(255, 2, 110, 71),
-        systemNavigationBarColor: Colors.white,
-      ),
-    );
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   const SystemUiOverlayStyle().copyWith(
+    //     statusBarBrightness: Brightness.light,
+    //     statusBarColor: const Color.fromARGB(255, 2, 110, 71),
+    //     systemNavigationBarColor: Colors.white,
+    //   ),
+    // );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 2, 110, 71),
+      ),
       body: SafeArea(
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -95,18 +98,21 @@ class _SplashScreenState extends State<SplashScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     //? Возможно поменять на кнопку
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, "/mainPage");
-                      },
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * .08,
-                        width: 300,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 247, 120, 61),
-                          borderRadius: BorderRadius.circular(100),
+
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * .08,
+                      width: 300,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(0),
+                          shadowColor: Colors.transparent,
+                          backgroundColor:
+                              const Color.fromARGB(255, 247, 120, 61),
                         ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, "/mainPage");
+                        },
                         child: const Center(
                           child: Text(
                             'Вперёд',

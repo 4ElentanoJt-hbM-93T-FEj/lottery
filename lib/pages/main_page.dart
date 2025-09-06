@@ -69,17 +69,17 @@ class _MainPageState extends State<MainPage> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          GestureDetector(
-            onTap: () {
-              generateNewTicket();
-            },
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.green[400],
-                shape: BoxShape.circle,
+          SizedBox(
+            width: 40,
+            height: 40,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(0),
+                backgroundColor: Colors.green[400],
               ),
+              onPressed: () {
+                generateNewTicket();
+              },
               child: const Icon(
                 Icons.add,
                 color: Color.fromARGB(255, 237, 221, 194),
@@ -89,17 +89,17 @@ class _MainPageState extends State<MainPage> {
           const SizedBox(
             height: 15,
           ),
-          GestureDetector(
-            onTap: () {
-              clearTickets();
-            },
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.green[400],
-                shape: BoxShape.circle,
+          SizedBox(
+            width: 40,
+            height: 40,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(0),
+                backgroundColor: Colors.green[400],
               ),
+              onPressed: () {
+                clearTickets();
+              },
               child: const Icon(
                 Icons.delete_forever,
                 color: Color.fromARGB(255, 237, 221, 194),
@@ -138,7 +138,7 @@ class _MainPageState extends State<MainPage> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
           decoration: const BoxDecoration(
             color: Color.fromARGB(255, 237, 221, 194),
           ),
@@ -146,8 +146,21 @@ class _MainPageState extends State<MainPage> {
             children: [
               Expanded(
                 child: lottery.isEmpty
-                    ? const Center(
-                        child: Text("Розыгрышей нет"),
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "lib/assets/img/box.png",
+                            width: 100,
+                            height: 100,
+                          ),
+                          const Text(
+                            "Розыгрышей нет :(",
+                            style: TextStyle(
+                              fontSize: 17,
+                            ),
+                          ),
+                        ],
                       )
                     : SingleChildScrollView(
                         child: Column(
@@ -169,20 +182,19 @@ class _MainPageState extends State<MainPage> {
   }
 
   void generateNewTicket() {
-    // Генерируем случайные числа
-    final userNumbers = generateRandomNumbers(6, 1, 49);
-    final winningNumbers = generateRandomNumbers(6, 1, 49);
+    //? Генерируем случайные числа
+    // final userNumbers = generateRandomNumbers(6, 1, 49);
+    final winningNumbers = generateRandomNumbers(5, 1, 20);
 
     // Создаем билет
     final newTicket = LotteryTicket.create(
-      userNumbers: userNumbers,
       winningNumbers: winningNumbers,
     );
 
-    // Сохраняем в Hive
+    //? Сохраняем в Hive
     HiveRepository.addTicket(newTicket);
 
-    // Обновляем UI
+    //? Обновляем UI
     setState(() {
       getTickets();
     });

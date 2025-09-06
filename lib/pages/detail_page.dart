@@ -116,18 +116,32 @@ class _CardDetailState extends State<CardDetail> {
                                     ),
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      counter = 1;
-                                      selectedValues.clear();
-                                    });
-                                  },
-                                  child: const Icon(
-                                    Icons.refresh_rounded,
-                                    color: Color.fromARGB(255, 142, 201, 179),
+                                SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.all(0),
+                                      shadowColor: Colors.transparent,
+                                      backgroundColor: const Color.fromARGB(
+                                        255,
+                                        2,
+                                        110,
+                                        71,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        counter = 1;
+                                        selectedValues.clear();
+                                      });
+                                    },
+                                    child: const Icon(
+                                      Icons.refresh_rounded,
+                                      color: Color.fromARGB(255, 142, 201, 179),
+                                    ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                             const SizedBox(
@@ -197,17 +211,26 @@ class _CardDetailState extends State<CardDetail> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  if (counter > 1) {
-                                    counter--;
-                                  }
-                                });
-                              },
-                              child: const Icon(
-                                Icons.remove,
-                                color: Colors.white,
+                            SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(0),
+                                  shadowColor: Colors.transparent,
+                                  backgroundColor: Colors.transparent,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    if (counter > 1) {
+                                      counter--;
+                                    }
+                                  });
+                                },
+                                child: const Icon(
+                                  Icons.remove,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                             Expanded(
@@ -220,17 +243,26 @@ class _CardDetailState extends State<CardDetail> {
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  if (counter < 10) {
-                                    counter++;
-                                  }
-                                });
-                              },
-                              child: const Icon(
-                                Icons.add,
-                                color: Colors.white,
+                            SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(0),
+                                  shadowColor: Colors.transparent,
+                                  backgroundColor: Colors.transparent,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    if (counter < 10) {
+                                      counter++;
+                                    }
+                                  });
+                                },
+                                child: const Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ],
@@ -240,30 +272,37 @@ class _CardDetailState extends State<CardDetail> {
                   ),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.all(10),
+              SizedBox(
                 width: 200,
                 height: 50,
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 2, 110, 71),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(15),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(0),
+                    shadowColor: Colors.transparent,
+                    backgroundColor: const Color.fromARGB(255, 2, 110, 71),
                   ),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Center(
-                        child: Text(
-                          'Подтвердить',
-                          style: TextStyle(
-                            color: Colors.white,
+                  onPressed: () {
+                    setState(() {
+                      if (counter > 1) {
+                        counter--;
+                      }
+                    });
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            'Подтвердить',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

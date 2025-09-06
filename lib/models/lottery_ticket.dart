@@ -33,19 +33,24 @@ class LotteryTicket {
 
   // Конструктор для создания нового билета
   LotteryTicket.create({
-    required this.userNumbers,
     required this.winningNumbers,
   })  : id = DateTime.now().millisecondsSinceEpoch.toString(),
         date = DateTime.now(),
-        matches = _calculateMatches(userNumbers, winningNumbers),
-        isWinner = _calculateMatches(userNumbers, winningNumbers) >= 3;
+        isWinner = false,
+        userNumbers = [],
+        matches = _calculateMatches(
+          [],
+          winningNumbers,
+        );
 
   static int _calculateMatches(List<int> user, List<int> winning) {
     return user.where((number) => winning.contains(number)).length;
   }
 
   String get result {
+    if (userNumbers.isEmpty) return "Примите участие";
     if (matches >= 3) return 'Выигрыш ($matches из ${winningNumbers.length})';
+
     return 'Не выиграл ($matches из ${winningNumbers.length})';
   }
 }
