@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:loto_app/models/lottery_ticket.dart';
+import 'package:loto_app/services/hive_repository.dart';
 
 class CardDetail extends StatefulWidget {
   const CardDetail({
@@ -14,12 +13,13 @@ class CardDetail extends StatefulWidget {
 
 class _CardDetailState extends State<CardDetail> {
   int counter = 1;
+  String typeRate = "";
   List<int> selectedValues = [];
 
   @override
   Widget build(BuildContext context) {
     final route = ModalRoute.of(context);
-    final parametres = route?.settings.arguments as LotteryTicket;
+    final parametres = route?.settings.arguments as List<dynamic>;
     // ?? (route?.settings.name?.split('/').last);
 
     return Scaffold(
@@ -30,7 +30,7 @@ class _CardDetailState extends State<CardDetail> {
             Expanded(
               child: Center(
                 child: Text(
-                  "Тираж №${parametres.id}",
+                  "Тираж №${parametres[0].id}",
                 ),
               ),
             ),
@@ -41,7 +41,7 @@ class _CardDetailState extends State<CardDetail> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.all(25),
           decoration: const BoxDecoration(
             color: Color.fromARGB(255, 237, 221, 194),
           ),
@@ -71,7 +71,11 @@ class _CardDetailState extends State<CardDetail> {
                                     width: 5,
                                   ),
                                   Text(
-                                    parametres.date.toString().split(" ").first,
+                                    parametres[0]
+                                        .date
+                                        .toString()
+                                        .split(" ")
+                                        .first,
                                   ),
                                   const SizedBox(
                                     width: 15,
@@ -81,7 +85,8 @@ class _CardDetailState extends State<CardDetail> {
                                     width: 5,
                                   ),
                                   Text(
-                                    parametres.date
+                                    parametres[0]
+                                        .date
                                         .toString()
                                         .split(" ")[1]
                                         .split('.')
@@ -135,7 +140,7 @@ class _CardDetailState extends State<CardDetail> {
                                     ),
                                     onPressed: () {
                                       setState(() {
-                                        counter = 1;
+                                        typeRate = '';
                                         selectedValues.clear();
                                       });
                                     },
@@ -292,61 +297,74 @@ class _CardDetailState extends State<CardDetail> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.all(20),
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    typeRate = "bet";
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20),
+                                    ),
+                                    color: Colors.white,
                                   ),
-                                  color: Colors.white,
-                                ),
-                                child: const Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                "Тип ставки",
-                                                style: TextStyle(
-                                                  color: Colors.black54,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  "Тип ставки",
+                                                  style: TextStyle(
+                                                    color: Colors.black54,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                "Одноразовая ставка",
-                                                style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 17,
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  "Одноразовая ставка",
+                                                  style: TextStyle(
+                                                    color: Colors.black54,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 17,
+                                                    overflow: TextOverflow.fade,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Icon(
-                                          Icons.check_circle,
-                                          size: 30,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Icon(
+                                            Icons.check_circle,
+                                            size: 30,
+                                            color: typeRate == "bet"
+                                                ? const Color.fromARGB(
+                                                    255, 247, 120, 61)
+                                                : null,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -354,61 +372,73 @@ class _CardDetailState extends State<CardDetail> {
                               width: 20,
                             ),
                             Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.all(20),
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    typeRate = "subscribe";
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20),
+                                    ),
+                                    color: Colors.white,
                                   ),
-                                  color: Colors.white,
-                                ),
-                                child: const Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                "Тип ставки",
-                                                style: TextStyle(
-                                                  color: Colors.black54,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  "Тип ставки",
+                                                  style: TextStyle(
+                                                    color: Colors.black54,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                "Подписка",
-                                                style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 17,
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  "Подписка",
+                                                  style: TextStyle(
+                                                    color: Colors.black54,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 17,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Icon(
-                                          Icons.check_circle,
-                                          size: 30,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Icon(
+                                            Icons.check_circle,
+                                            size: 30,
+                                            color: typeRate == "subscribe"
+                                                ? const Color.fromARGB(
+                                                    255, 247, 120, 61)
+                                                : null,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -429,7 +459,7 @@ class _CardDetailState extends State<CardDetail> {
                     backgroundColor: const Color.fromARGB(255, 2, 110, 71),
                   ),
                   onPressed: () {
-                    if (selectedValues.length < 5) {
+                    if (selectedValues.length < 5 || typeRate == "") {
                       showDialog(
                         context: context,
                         builder: (ctx) => AlertDialog(
@@ -442,7 +472,7 @@ class _CardDetailState extends State<CardDetail> {
                           backgroundColor:
                               const Color.fromARGB(255, 2, 110, 71),
                           content: const Text(
-                            "Вы выбрали не все значения!",
+                            "Вы выбрали не все значения или тип ставки",
                             style: TextStyle(
                               color: Colors.white,
                             ),
@@ -457,6 +487,87 @@ class _CardDetailState extends State<CardDetail> {
                                   },
                                   child: const Text(
                                     "Хорошо",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      try {
+                        updateTicket();
+                      } catch (_) {
+                        showDialog(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            title: const Text(
+                              "Ошибка",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            backgroundColor:
+                                const Color.fromARGB(255, 2, 110, 71),
+                            content: const Text(
+                              "Произошла ошибка",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            actions: <Widget>[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop();
+                                    },
+                                    child: const Text(
+                                      "Закрыть",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      Navigator.pop(context);
+                      parametres[1]();
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text(
+                            "Уведомление",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          backgroundColor:
+                              const Color.fromARGB(255, 2, 110, 71),
+                          content: const Text(
+                            "Вы стали участником лоттереи!",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          actions: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(ctx).pop();
+                                  },
+                                  child: const Text(
+                                    "Отлично",
                                     style: TextStyle(
                                       color: Colors.white,
                                     ),
@@ -491,5 +602,24 @@ class _CardDetailState extends State<CardDetail> {
         ),
       ),
     );
+  }
+
+  void updateTicket() {
+    final route = ModalRoute.of(context);
+    final parametres = route?.settings.arguments as List<dynamic>;
+
+    //? Создаем билет
+    final newTicket = LotteryTicket.update(
+      id: parametres[0].id,
+      winningNumbers: parametres[0].winningNumbers,
+      date: parametres[0].date,
+      isWinner: parametres[0].isWinner,
+      userNumbers: selectedValues,
+      matches: parametres[0].matches,
+      typeRate: typeRate,
+    );
+
+    //? Сохраняем в Hive
+    HiveRepository.updateTicket(newTicket);
   }
 }

@@ -1,13 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:loto_app/models/lottery_ticket.dart';
 
 class LotoCard extends StatelessWidget {
   final LotteryTicket ticket;
+  final Function updateFunc;
 
   const LotoCard(
-    this.ticket, {
+    this.ticket,
+    this.updateFunc, {
     super.key,
   });
 
@@ -59,30 +59,34 @@ class LotoCard extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
-                width: 125,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 247, 120, 61),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      "/cardDetail",
-                      arguments: ticket,
-                    );
-                  },
-                  child: const Center(
-                    child: Text(
-                      "Играть",
-                      style: TextStyle(
-                        color: Colors.white,
+              if (ticket.userNumbers.isEmpty)
+                SizedBox(
+                  width: 125,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 247, 120, 61),
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        "/cardDetail",
+                        arguments: [
+                          ticket,
+                          updateFunc,
+                        ],
+                      );
+                    },
+                    child: const Center(
+                      child: Text(
+                        "Играть",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
           const SizedBox(

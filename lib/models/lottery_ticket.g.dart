@@ -23,13 +23,14 @@ class LotteryTicketAdapter extends TypeAdapter<LotteryTicket> {
       winningNumbers: (fields[3] as List).cast<int>(),
       matches: fields[4] as int,
       isWinner: fields[5] as bool,
+      typeRate: fields[6] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, LotteryTicket obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class LotteryTicketAdapter extends TypeAdapter<LotteryTicket> {
       ..writeByte(4)
       ..write(obj.matches)
       ..writeByte(5)
-      ..write(obj.isWinner);
+      ..write(obj.isWinner)
+      ..writeByte(6)
+      ..write(obj.typeRate);
   }
 
   @override

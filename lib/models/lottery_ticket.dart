@@ -22,6 +22,9 @@ class LotteryTicket {
   @HiveField(5)
   final bool isWinner;
 
+  @HiveField(6)
+  final String typeRate;
+
   LotteryTicket({
     required this.id,
     required this.date,
@@ -29,6 +32,7 @@ class LotteryTicket {
     required this.winningNumbers,
     required this.matches,
     required this.isWinner,
+    required this.typeRate,
   });
 
   // Конструктор для создания нового билета
@@ -41,7 +45,19 @@ class LotteryTicket {
         matches = _calculateMatches(
           [],
           winningNumbers,
-        );
+        ),
+        typeRate = "";
+
+// Обновление билета
+  LotteryTicket.update({
+    required this.winningNumbers,
+    required this.id,
+    required this.date,
+    required this.isWinner,
+    required this.userNumbers,
+    required this.matches,
+    required this.typeRate,
+  });
 
   static int _calculateMatches(List<int> user, List<int> winning) {
     return user.where((number) => winning.contains(number)).length;

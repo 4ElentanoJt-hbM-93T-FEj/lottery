@@ -1,18 +1,19 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loto_app/services/provider.dart';
 import 'package:loto_app/widgets/card.dart';
 import '../services/hive_repository.dart';
 import '../models/lottery_ticket.dart';
 
-class MainPage extends StatefulWidget {
+class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  ConsumerState<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends ConsumerState<MainPage> {
   int selectedItem = 0;
   List<LotteryTicket> lottery = [];
 
@@ -37,6 +38,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    // ref.watch(listLottery);
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
@@ -168,6 +170,7 @@ class _MainPageState extends State<MainPage> {
                             for (int i = 0; i < lottery.length; i++) ...[
                               LotoCard(
                                 lottery[i],
+                                getTickets,
                               ),
                             ],
                           ],

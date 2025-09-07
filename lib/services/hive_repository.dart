@@ -23,8 +23,26 @@ class HiveRepository {
     await box?.put(ticket.id, ticket);
   }
 
+  // Подтверждение участия
+  static Future<void> updateTicket(
+    LotteryTicket ticket,
+  ) async {
+    await box?.put(ticket.id, ticket);
+    addTicket(ticket);
+  }
+
   // Получить все билеты (отсортированные по дате)
   static List<LotteryTicket> getAllTickets() {
+    if (box == null) return [];
+
+    final tickets = box!.values.toList();
+    // Сортируем по дате (новые сверху)
+    tickets.sort((a, b) => b.date.compareTo(a.date));
+    return tickets;
+  }
+
+  // Получить все билеты (отсортированные по дате)
+  static List<LotteryTicket> getResultTickets() {
     if (box == null) return [];
 
     final tickets = box!.values.toList();
